@@ -1,0 +1,11 @@
+Click==7.0
+Flask==1.1.1
+itsdangerous==1.1.0
+Jinja2==2.10.3
+MarkupSafe==1.1.1
+python-json-logger==0.1.11
+PyYAML==5.1.2
+six==1.12.0
+structlog==19.2.0
+viaa-chassis==0.0.4
+Werkzeug==0.16.0
