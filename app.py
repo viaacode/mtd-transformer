@@ -3,8 +3,8 @@
 import os
 import sys
 
-from flask import Flask, escape, request
-from transformer.transformer import transform_xml
+from flask import Flask, escape, request, abort
+from transformer.transformer import Transformer
 from viaa.configuration import ConfigParser
 from viaa.observability import logging
 
@@ -17,8 +17,17 @@ app = Flask(__name__)
 
 @app.route('/v1/transform/', methods=['POST'])
 def transform():
-    logger.info("Transforming", request=request.get_json())
-    return str(transform_xml(request.get_json()['xml'], 'vrt'))
+    logger.info("Incoming transformation request", request=request.data, request_id=request.headers.get('x-viaa-request-id'))
+
+    # Check if the request contains a valid, non-empty JSON body.
+    if data := request.json:
+        result = Transformer().transform(data)
+    else:
+        abort(400)
+
+    return result
+    # TODO: remove
+    # str(transform_xml(request.get_json()['xml'], 'vrt'))
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5000)
