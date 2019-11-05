@@ -29,6 +29,7 @@ To transform an XML-file, send a `POST` request to `http://0.0.0.0:5000/transfor
 
 ```json
 {
+    "cp_id": "OR-id",
     "xml": "<?xml version='1.0' encoding='UTF-8' standalone='yes'?> <metadataUpdatedEvent> <timestamp>2019-10-22T20:04:00.335+02:00</timestamp> <metadata> </metadata> </metadataUpdatedEvent>"
 }
 
