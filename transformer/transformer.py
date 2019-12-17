@@ -51,8 +51,9 @@ class Transformer:
         return str(result.stdout.decode())
 
     def __get_path_to_xslt(self, cp_id):
+        # The xslt should exist in the resources folder.
         base_dir = os.getcwd()
-        xslt_path = os.path.join(base_dir, "resources", cp_id + ".xslt")
+        xslt_path = os.path.join(base_dir, "resources", cp_id, "main.xslt")
         return xslt_path
 
     def __get_path_to_saxon(self):
