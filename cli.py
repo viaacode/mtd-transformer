@@ -24,16 +24,29 @@ def cli(verbose):
 def transform(input_file, output, transformation):
     filetype = Path(input_file).suffix[1:] # We remove the '.' from the extension to align with the API.
 
-    with open(input_file) as input_file:
-        data = input_file.read()
+    try:
+        with open(input_file) as input_file:
+            data = input_file.read()
+    except FileNotFoundError as error:
+        click.echo(click.style(f"{error}", fg="red"))
+        return
+
+
     transformer = Transformer()
 
-    result = transformer.transform(filetype, data, transformation)
+    try:
+        result = transformer.transform(filetype, data, transformation)
+    except (ValueError, TypeError) as error:
+        click.echo(click.style(f"{error}", fg="red"))
+        return
+
     if output:
         os.makedirs(os.path.dirname(output), exist_ok=True)
         # TODO: Handle case where transformation results in multiple output files.
         with open(output, "w") as output_file:
             output_file.write(result)
+
+        click.echo(click.style(f"Result is written to {Path(output).absolute()}. ✨", fg="green"))
     else:
         print(result)
 

@@ -17,11 +17,9 @@ class Transformer:
 
     def transform(self, input_type: str, data: str, transformation: str) -> str:
         if input_type not in SUPPORTED_FILE_TYPES:
-            raise TypeError(f"{input_type} is not supported, please use one of the following: {SUPPORTED_FILE_TYPES}.")
-        if not data.strip():
-            raise ValueError(f"Please provide a non-empty input.")
+            raise TypeError(f"'{input_type}' is not supported, please use one of the following types: {SUPPORTED_FILE_TYPES}.")
         if not os.path.exists(f"./resources/{transformation}"):
-            raise ValueError(f"Please provide an existing transformation.")
+            raise ValueError(f"No such transformation: '{transformation}'.")
 
         function_for_input_type = getattr(self, f"transform_{input_type}")
         result = function_for_input_type(data, transformation)
