@@ -9,34 +9,47 @@ from viaa.observability import logging
 config = ConfigParser()
 logger = logging.get_logger(__name__, config=config)
 
+SUPPORTED_FILE_TYPES = ["xml", "csv", "json"] # TODO: check best practices
 
 class Transformer:
     def __init__(self):
         pass
 
-    def transform(self, data):
-        if not data.get("cp_id"):
-            raise
+    def transform(self, input_type: str, data: str, transformation: str) -> str:
+        if input_type not in SUPPORTED_FILE_TYPES:
+            raise TypeError(f"{input_type} is not supported, please use one of the following: {SUPPORTED_FILE_TYPES}.")
+        if not data.strip():
+            raise ValueError(f"Please provide a non-empty input.")
+        if not os.path.exists(f"./resources/{transformation}"):
+            raise ValueError(f"Please provide an existing transformation.")
 
-        if data.get("xml"):
-            return self.transform_xml(data.get("xml"), data.get("cp_id"))
+        function_for_input_type = getattr(self, f"transform_{input_type}")
+        result = function_for_input_type(data, transformation)
 
-        if data.get("json"):
-            return self.transform_json(data.get("json"), data.get("cp_id"))
+        return result
 
-        raise
 
-    def transform_json(self, json, cp_id):
+    # TODO: Implement JSON transformations
+    def transform_json(self, json: str, transformation: str) -> str:
+        print("Not implemented yet.")
+
         pass
 
-    def transform_xml(self, xml, cp_id):
-        xslt_path = self.__get_path_to_xslt(cp_id)
+    # TODO: Implement CSV transformations
+    def transform_csv(self, csv: str, transformation: str) -> str:
+        print("Not implemented yet.")
+
+        pass
+
+
+    def transform_xml(self, xml: str, transformation: str):
+        xslt_path = self.__get_path_to_xslt(transformation)
         saxon_path = self.__get_path_to_saxon()
 
         # Subprocess.run expects a byte array instead of a string as input.
         xml_bytes = str.encode(xml)
 
-        logger.debug("Transformer", xml=xml_bytes, cp_id=cp_id, xslt=xslt_path)
+        logger.debug("Transformer", xml=xml_bytes, cp_id=transformation, xslt=xslt_path)
 
         # The Saxon command receives the following parameters:
         # `-s:-` sets the source to stdin
@@ -50,10 +63,10 @@ class Transformer:
         # Captured stdout needs to be decoded from bytes to string.
         return str(result.stdout.decode())
 
-    def __get_path_to_xslt(self, cp_id):
+    def __get_path_to_xslt(self, transformation: str):
         # The xslt should exist in the resources folder.
         base_dir = os.getcwd()
-        xslt_path = os.path.join(base_dir, "resources", cp_id, "main.xslt")
+        xslt_path = os.path.join(base_dir, "resources", transformation, "main.xslt")
         return xslt_path
 
     def __get_path_to_saxon(self):

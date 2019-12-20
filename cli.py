@@ -11,6 +11,7 @@ from transformer.transformer import Transformer
 @click.option("--verbose", "-v", is_flag=True)
 def cli(verbose):
     "Coole CLI voor metadata transformaties"
+    
     if verbose:
         click.echo(click.style("VERBOOS", fg="red"))
     pass
@@ -20,11 +21,11 @@ def cli(verbose):
 @click.option("--output", "-o", help="Path of the output file.")
 @click.option("--transformation", "-t", prompt=True, help="Transformation to be used.")
 def transform(input_file, output, transformation):
-    extension = Path(input_file).suffix
+    filetype = Path(input_file).suffix[1:]
     with open(input_file) as file:
         data = file.read()
     transformer = Transformer()
-    click.echo(transformer.transform_xml(data, transformation))
+    click.echo(transformer.transform(filetype, data, transformation))
 
 
 @cli.command()
