@@ -11,7 +11,7 @@ from transformer.transformer import Transformer
 @click.option("--verbose", "-v", is_flag=True)
 def cli(verbose):
     "Coole CLI voor metadata transformaties"
-    
+
     if verbose:
         click.echo(click.style("VERBOOS", fg="red"))
     pass
@@ -26,6 +26,13 @@ def transform(input_file, output, transformation):
         data = file.read()
     transformer = Transformer()
     click.echo(transformer.transform(filetype, data, transformation))
+
+
+@cli.command(short_help="List all available transformations.")
+def list():
+    resources = Path('./resources')
+    transformations = [transformation.stem for transformation in resources.iterdir()]
+    print(*transformations, sep="\n")
 
 
 @cli.command()
