@@ -22,7 +22,8 @@ def cli(verbose):
 @click.option("--output", "-o", help="Path of the output file.")
 @click.option("--transformation", "-t", prompt=True, help="Transformation to be used.")
 def transform(input_file, output, transformation):
-    filetype = Path(input_file).suffix[1:] # We remove the '.' from the extension to align with the API.
+    # We remove the '.' from the extension to align with the API.
+    filetype = Path(input_file).suffix[1:]
 
     try:
         with open(input_file) as input_file:
@@ -51,8 +52,8 @@ def transform(input_file, output, transformation):
         print(result)
 
 
-@cli.command(help="List all available transformations.")
-def list():
+@cli.command(name="list", help="List all available transformations.")
+def list_transformations():
     resources = Path('./resources')
 
     if not resources.exists():
