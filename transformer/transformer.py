@@ -9,15 +9,15 @@ from viaa.observability import logging
 config = ConfigParser()
 logger = logging.get_logger(__name__, config=config)
 
-SUPPORTED_FILE_TYPES = ["xml", "csv", "json"] # TODO: check best practices
+SUPPORTED_TYPES = ["xml", "csv", "json"] # TODO: check best practices
 
 class Transformer:
     def __init__(self):
         pass
 
     def transform(self, input_type: str, data: str, transformation: str) -> str:
-        if input_type not in SUPPORTED_FILE_TYPES:
-            raise TypeError(f"'{input_type}' is not supported, please use one of the following types: {SUPPORTED_FILE_TYPES}.")
+        if input_type not in SUPPORTED_TYPES:
+            raise TypeError(f"'{input_type}' is not supported, please use one of the following types: {SUPPORTED_TYPES}.")
         if not os.path.exists(f"./resources/{transformation}"):
             raise ValueError(f"No such transformation: '{transformation}'.")
 
@@ -44,10 +44,7 @@ class Transformer:
         xslt_path = self.__get_path_to_xslt(transformation)
         saxon_path = self.__get_path_to_saxon()
 
-        # Subprocess.run expects a byte array instead of a string as input.
-        xml_bytes = str.encode(xml)
-
-        logger.debug("Transformer", xml=xml_bytes, cp_id=transformation, xslt=xslt_path)
+        logger.debug("Transformer", xml=xml, cp_id=transformation, xslt=xslt_path)
 
         # The Saxon command receives the following parameters:
         # `-s:-` sets the source to stdin
@@ -55,7 +52,7 @@ class Transformer:
         result = subprocess.run(
             ["java", "-jar", saxon_path, "-s:-", f"-xsl:{xslt_path}"],
             capture_output=True,
-            input=xml_bytes,
+            input=xml,
         )
 
         # Captured stdout needs to be decoded from bytes to string.

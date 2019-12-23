@@ -26,12 +26,11 @@ def transform(input_file, output, transformation):
     filetype = Path(input_file).suffix[1:]
 
     try:
-        with open(input_file) as input_file:
+        with open(input_file, "rb") as input_file:
             data = input_file.read()
     except FileNotFoundError as error:
         click.echo(click.style(f"{error}", fg="red"))
         return
-
 
     transformer = Transformer()
 
