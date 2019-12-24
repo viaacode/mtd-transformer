@@ -15,32 +15,47 @@ class Transformer:
     def __init__(self):
         pass
 
-    def transform(self, input_type: str, data: str, transformation: str) -> str:
+    def transform(self, input_type: str, data: bytes, transformation: str) -> str:
+        """Calls the correct transformation based on the input_type.
+
+        Arguments:
+            input_type {str} -- Filetype of the input, currently limited to XML, CSV or JSON.
+            data {bytes} -- Input that needs to be transformed as a bytestring.
+            transformation {str} -- Name of the transformation to be used.
+
+        Raises:
+            TypeError: An unsupported input type has been passed.
+            ValueError: An unknown transformation has been passed.
+
+        Returns:
+            str -- The result of the metadata transformation.
+        """
+
         if input_type not in SUPPORTED_TYPES:
             raise TypeError(f"'{input_type}' is not supported, please use one of the following types: {SUPPORTED_TYPES}.")
         if not os.path.exists(f"./resources/{transformation}"):
             raise ValueError(f"No such transformation: '{transformation}'.")
 
-        function_for_input_type = getattr(self, f"transform_{input_type}")
+        function_for_input_type = getattr(self, f"_Transformer__transform_{input_type}")
         result = function_for_input_type(data, transformation)
 
         return result
 
 
-    # TODO: Implement JSON transformations
-    def transform_json(self, json: str, transformation: str) -> str:
+    # TODO: [AD-426] Implement JSON transformations
+    def __transform_json(self, json: bytes, transformation: str) -> None:
         print("Not implemented yet.")
 
         pass
 
-    # TODO: Implement CSV transformations
-    def transform_csv(self, csv: str, transformation: str) -> str:
+    # TODO: [AD-372] Implement CSV transformations
+    def __transform_csv(self, csv: bytes, transformation: str) -> None:
         print("Not implemented yet.")
 
         pass
 
 
-    def transform_xml(self, xml: str, transformation: str):
+    def __transform_xml(self, xml: bytes, transformation: str) -> str:
         xslt_path = self.__get_path_to_xslt(transformation)
         saxon_path = self.__get_path_to_saxon()
 
