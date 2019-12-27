@@ -35,11 +35,14 @@ def log_request(func):
 @app.route("/v1/transform/", methods=["POST"])
 @log_request
 def transform():
-    # Check if the request contains a valid, non-empty JSON body.
-    if data := request.json:
-        result = Transformer().transform(data)
-    else:
-        abort(400)
+    input_type = request.headers.get("Content-Type").split("/")[-1]
+    data = request.data
+    transformation = request.args.get("transformation")
+
+    try:
+        result = Transformer().transform(input_type, data, transformation)
+    except (ValueError, TypeError) as error:
+            abort(400, description=str(error))
 
     return result
 

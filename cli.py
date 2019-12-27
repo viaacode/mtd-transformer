@@ -26,12 +26,11 @@ def transform(input_file, output, transformation):
     filetype = Path(input_file).suffix[1:]
 
     try:
-        with open(input_file) as input_file:
+        with open(input_file, "rb") as input_file:
             data = input_file.read()
     except FileNotFoundError as error:
         click.echo(click.style(f"{error}", fg="red"))
         return
-
 
     transformer = Transformer()
 
@@ -43,7 +42,7 @@ def transform(input_file, output, transformation):
 
     if output:
         os.makedirs(os.path.dirname(output), exist_ok=True)
-        # TODO: Handle case where transformation results in multiple output files.
+        # TODO: [AD-429] Handle case where transformation results in multiple output files.
         with open(output, "w") as output_file:
             output_file.write(result)
 
