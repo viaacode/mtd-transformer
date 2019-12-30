@@ -15,6 +15,16 @@ class Transformer:
     def __init__(self):
         pass
 
+
+    def list_transformations(self):
+        resources = Path('./resources')
+
+        if not resources.exists():
+            return []
+
+        return [transformation.stem for transformation in resources.iterdir()]
+
+
     def transform(self, input_type: str, data: bytes, transformation: str) -> str:
         """Calls the correct transformation based on the input_type.
 

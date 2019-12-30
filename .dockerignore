@@ -1,0 +1,23 @@
+# IDE stuff
+.mypy_cache/
+.vscode/
+
+# Git
+.gitignore
+
+# Environments
+.env
+.venv
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+
+# Python
+__pycache__/
+
+# Application specific
+docs/
+config.yml
+resources/

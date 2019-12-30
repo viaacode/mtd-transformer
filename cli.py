@@ -53,13 +53,12 @@ def transform(input_file, output, transformation):
 
 @cli.command(name="list", help="List all available transformations.")
 def list_transformations():
-    resources = Path('./resources')
+    transformations = Transformer().list_transformations()
 
-    if not resources.exists():
-        print("No transformations are available.")
+    if not transformations:
+        print("No transformations available.")
         return
 
-    transformations = [transformation.stem for transformation in resources.iterdir()]
     print(*transformations, sep="\n")
 
 

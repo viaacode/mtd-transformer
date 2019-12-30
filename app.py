@@ -5,7 +5,7 @@ import os
 import sys
 import functools
 
-from flask import Flask, abort, escape, request
+from flask import Flask, abort, escape, request, jsonify
 from transformer.transformer import Transformer
 from viaa.configuration import ConfigParser
 from viaa.observability import logging
@@ -17,13 +17,14 @@ sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "."))
 
 app = Flask(__name__)
 
-
+# TODO: [AD-451] add request logging to chassis.py.
 def log_request(func):
     @functools.wraps(func)
     def wrapper(*args, **kwargs):
         logger.info(
-            "Incoming transformation request",
-            request=request.data,
+            "Incoming request",
+            path=request.path,
+            data=request.data,
             request_id=request.headers.get("x-viaa-request-id"),
         )
 
@@ -45,6 +46,14 @@ def transform():
             abort(400, description=str(error))
 
     return result
+
+
+@app.route("/v1/transformations/list", methods=["GET"])
+@log_request
+def list_transformations():
+    transformations = Transformer().list_transformations()
+
+    return jsonify(transformations)
 
 
 if __name__ == "__main__":
