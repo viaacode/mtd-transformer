@@ -7,9 +7,9 @@ RUN pip install -r requirements.txt --extra-index-url http://do-prd-mvn-01.do.vi
 RUN chmod 775 .
 
 # install java, needed for saxon
-RUN apt update
-RUN apt install -y default-jre
-RUN java -version
+RUN apt update \
+&& apt install -y default-jre \
+&& rm -rf /var/lib/apt
 
 EXPOSE 5000
 CMD [ "python", "app.py" ]
