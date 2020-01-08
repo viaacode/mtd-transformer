@@ -28,7 +28,7 @@ def transform(input_file, output, transformation):
     try:
         with open(input_file, "rb") as input_file:
             data = input_file.read()
-    except FileNotFoundError as error:
+    except IOError as error:
         click.echo(click.style(f"{error}", fg="red"))
         return
 
@@ -41,10 +41,14 @@ def transform(input_file, output, transformation):
         return
 
     if output:
-        os.makedirs(os.path.dirname(output), exist_ok=True)
-        # TODO: [AD-429] Handle case where transformation results in multiple output files.
-        with open(output, "w") as output_file:
-            output_file.write(result)
+        try:
+            os.makedirs(os.path.dirname(output), exist_ok=True)
+            # TODO: [AD-429] Handle case where transformation results in multiple output files.
+            with open(output, "w") as output_file:
+                output_file.write(result)
+        except IOError as error:
+            click.echo(click.style(f"{error}", fg="red"))
+            return
 
         click.echo(click.style(f"Result is written to {Path(output).absolute()}. ✨", fg="green"))
     else:
