@@ -8,14 +8,6 @@ import click
 
 from transformer.transformer import Transformer
 
-@click.group()
-@click.option("--verbose", "-v", is_flag=True)
-def cli(verbose):
-    "Coole CLI voor metadata transformaties"
-
-    if verbose:
-        click.echo(click.style("VERBOOS", fg="red"))
-    pass
 
 @cli.command(help="Transforms an input file based on a given transformation.")
 @click.option("--input", "-i", "input_file", prompt=True, help="File path of the input file.")
@@ -43,7 +35,6 @@ def transform(input_file, output, transformation):
     if output:
         try:
             os.makedirs(os.path.dirname(output), exist_ok=True)
-            # TODO: [AD-429] Handle case where transformation results in multiple output files.
             with open(output, "w") as output_file:
                 output_file.write(result)
         except IOError as error:
@@ -64,14 +55,6 @@ def list_transformations():
         return
 
     print(*transformations, sep="\n")
-
-
-@cli.command()
-@click.option("--input", "-i", "input_file", prompt=True, help="File path of the input file.")
-@click.option("--validator", "-v", prompt="Location of the XSD-file", help="Path of the output file.")
-def validate(input_file, validator):
-    print(input_file)
-    print(validator)
 
 
 if __name__ == "__main__":

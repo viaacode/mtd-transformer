@@ -9,7 +9,7 @@ from viaa.observability import logging
 config = ConfigParser()
 logger = logging.get_logger(__name__, config=config)
 
-SUPPORTED_TYPES = ["xml", "csv", "json"] # TODO: check best practices
+SUPPORTED_TYPES = ["xml", "json"]
 
 class Transformer:
     def __init__(self):
@@ -21,7 +21,7 @@ class Transformer:
 
         if not resources.exists():
             return []
-
+        # `stem` returns the filename without extension.
         return [transformation.stem for transformation in resources.iterdir()]
 
 
@@ -54,12 +54,6 @@ class Transformer:
 
     # TODO: [AD-426] Implement JSON transformations
     def __transform_json(self, json: bytes, transformation: str) -> None:
-        print("Not implemented yet.")
-
-        pass
-
-    # TODO: [AD-372] Implement CSV transformations
-    def __transform_csv(self, csv: bytes, transformation: str) -> None:
         print("Not implemented yet.")
 
         pass
