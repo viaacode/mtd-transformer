@@ -8,6 +8,14 @@ import click
 
 from transformer.transformer import Transformer
 
+@click.group()
+@click.option("--verbose", "-v", is_flag=True)
+def cli(verbose):
+    "A CLI application that can be used to transform metadata."
+
+    if verbose:
+        click.echo(click.style("Verbose logging active.", fg="red"))
+    pass
 
 @cli.command(help="Transforms an input file based on a given transformation.")
 @click.option("--input", "-i", "input_file", prompt=True, help="File path of the input file.")
