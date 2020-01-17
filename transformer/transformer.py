@@ -70,7 +70,7 @@ class Transformer:
         # `-xsl:f{xslt}` sets the xslt to be used, currently located in a file.
         result = subprocess.run(
             ["java", "-jar", saxon_path, "-s:-", f"-xsl:{xslt_path}"],
-            capture_output=True,
+            stdout=subprocess.PIPE,
             input=xml,
         )
 
