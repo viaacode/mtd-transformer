@@ -6,14 +6,12 @@ import sys
 import functools
 
 from flask import Flask, abort, escape, request, jsonify
-from transformer.transformer import Transformer
+from app.transformer.transformer import Transformer
 from viaa.configuration import ConfigParser
 from viaa.observability import logging
 
 config = ConfigParser()
 logger = logging.get_logger(__name__, config=config)
-
-sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), ".")))
 
 app = Flask(__name__)
 
@@ -43,7 +41,7 @@ def transform():
     try:
         result = Transformer().transform(input_type, data, transformation)
     except (ValueError, TypeError) as error:
-            abort(400, description=str(error))
+        abort(400, description=str(error))
 
     return result
 
@@ -54,7 +52,3 @@ def list_transformations():
     transformations = Transformer().list_transformations()
 
     return jsonify(transformations)
-
-
-if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=5000)

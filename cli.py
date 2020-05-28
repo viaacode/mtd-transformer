@@ -6,7 +6,7 @@ from pathlib import Path
 
 import click
 
-from transformer.transformer import Transformer
+from app.transformer.transformer import Transformer
 
 @click.group()
 @click.option("--verbose", "-v", is_flag=True)
