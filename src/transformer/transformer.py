@@ -2,12 +2,13 @@
 import os
 import subprocess
 from pathlib import Path
+from typing import List
 
 from viaa.configuration import ConfigParser
 from viaa.observability import logging
 
 config = ConfigParser()
-logger = logging.get_logger(__name__, config=config)
+log = logging.get_logger(__name__, config=config)
 
 SUPPORTED_TYPES = ["xml", "json"]
 
@@ -16,7 +17,7 @@ class Transformer:
     def __init__(self):
         pass
 
-    def list_transformations(self):
+    def list_transformations(self) -> List[str]:
         resources = Path("./resources")
 
         if not resources.exists():
@@ -62,7 +63,7 @@ class Transformer:
         xslt_path = self.__get_path_to_xslt(transformation)
         saxon_path = self.__get_path_to_saxon()
 
-        logger.debug("Transformer", xml=xml, cp_id=transformation, xslt=xslt_path)
+        log.debug("Transformer", xml=xml, transformation=transformation, xslt=xslt_path)
 
         # The Saxon command receives the following parameters:
         # `-s:-` sets the source to stdin

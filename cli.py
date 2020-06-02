@@ -1,12 +1,13 @@
 #!/usr/bin/env python
+# -*- coding: utf-8 -*-
 
 import os
-from argparse import ArgumentParser
 from pathlib import Path
 
 import click
 
-from app.transformer.transformer import Transformer
+from src.transformer.transformer import Transformer
+
 
 @click.group()
 @click.option("--verbose", "-v", is_flag=True)
@@ -17,8 +18,11 @@ def cli(verbose):
         click.echo(click.style("Verbose logging active.", fg="red"))
     pass
 
+
 @cli.command(help="Transforms an input file based on a given transformation.")
-@click.option("--input", "-i", "input_file", prompt=True, help="File path of the input file.")
+@click.option(
+    "--input", "-i", "input_file", prompt=True, help="File path of the input file."
+)
 @click.option("--output", "-o", help="Path of the output file.")
 @click.option("--transformation", "-t", prompt=True, help="Transformation to be used.")
 def transform(input_file, output, transformation):
@@ -49,7 +53,11 @@ def transform(input_file, output, transformation):
             click.echo(click.style(f"{error}", fg="red"))
             return
 
-        click.echo(click.style(f"Result is written to {Path(output).absolute()}. ✨", fg="green"))
+        click.echo(
+            click.style(
+                f"Result is written to {Path(output).absolute()}. ✨", fg="green"
+            )
+        )
     else:
         print(result)
 
