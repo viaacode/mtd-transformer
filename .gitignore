@@ -143,6 +143,3 @@ tags
 
 # Editor
 .vscode/
-
-Pipfile
-Pipfile.lock

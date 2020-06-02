@@ -1,0 +1,28 @@
+[[source]]
+name = "pypi"
+url = "https://pypi.org/simple"
+verify_ssl = true
+
+[[source]]
+name = "meemoo"
+url = "http://do-prd-mvn-01.do.viaa.be:8081/repository/pypi-all/simple"
+verify_ssl = false
+
+[dev-packages]
+black = "*"
+isort = "*"
+flake8 = "*"
+mypy = "*"
+pytest = "*"
+pytest-cov = "*"
+
+[packages]
+flask = "*"
+uwsgi = "*"
+viaa-chassis = "*"
+
+[requires]
+python_version = "3.8"
+
+[pipenv]
+allow_prereleases = true
