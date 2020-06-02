@@ -14,16 +14,6 @@ pipeline {
                 sh 'make -f ./openshift/Makefile build'
             }
         }
-        stage('Run tests in container') {
-            steps {
-                sh 'make -f ./openshift/Makefile test'
-            }
-        }
-        stage('Run linter in container') {
-            steps {
-                sh 'make -f ./openshift/Makefile lint'
-            }
-        }
         stage('Push to Docker repo') {
             steps {
                 sh 'make -f ./openshift/Makefile push'
