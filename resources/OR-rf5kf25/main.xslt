@@ -49,7 +49,6 @@
             <mhs:Dynamic>
                 <CP>VRT</CP>
                 <CP_id>OR-rf5kf25</CP_id>
-                <PID> <!-- todo: is flowVar in mule --> </PID>
                 <dc_identifier_localid>
                     <xsl:value-of select="//ebu:identifier[@typeDefinition='MEDIA_ID']/dc:identifier"/>
                 </dc_identifier_localid>
