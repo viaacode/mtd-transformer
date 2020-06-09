@@ -3,6 +3,7 @@
     xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
     xmlns:dc="http://purl.org/dc/elements/1.1/"
     xmlns:ns8="http://www.vrt.be/mig/viaa"
+    xmlns:ns9="http://www.vrt.be/mig/viaa/api"
     xmlns:xs="http://www.w3.org/2001/XMLSchema"
     xmlns:fn="http://www.w3.org/2005/xpath-functions"
     xmlns:ebu="urn:ebu:metadata-schema:ebuCore_2012"
@@ -35,7 +36,7 @@
 
     <!-- templates -->
 
-    <xsl:template match="ns8:metadataUpdatedEvent | ns8:MakeMetadataAvailableResponse">
+    <xsl:template match="ns8:metadataUpdatedEvent | ns8:MakeMetadataAvailableResponse | ns9:metadata">
         <mhs:Sidecar xmlns:mhs="https://zeticon.mediahaven.com/metadata/19.2/mhs/"
             xmlns:mh="https://zeticon.mediahaven.com/metadata/19.2/mh/">
             <mhs:Descriptive>
