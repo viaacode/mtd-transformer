@@ -38,7 +38,7 @@
 
     <xsl:template match="ns8:metadataUpdatedEvent | ns8:MakeMetadataAvailableResponse | ns9:metadata">
         <mhs:Sidecar xmlns:mhs="https://zeticon.mediahaven.com/metadata/19.2/mhs/"
-            xmlns:mh="https://zeticon.mediahaven.com/metadata/19.2/mh/">
+            xmlns:mh="https://zeticon.mediahaven.com/metadata/19.2/mh/" version="19.2">
             <mhs:Descriptive>
                 <mh:Title>
                     <xsl:value-of select="//ebu:title/dc:title"/>
