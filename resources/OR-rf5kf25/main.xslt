@@ -165,12 +165,7 @@
                 <dc_rights_comment>
                     <xsl:value-of select="//ebu:description[@typeDefinition='rights']/dc:description, //ebu:description[@typeDefinition='rightsType']/dc:description"/>
                 </dc_rights_comment>
-                <StartTimeCode>
-                    <xsl:value-of select="format-time(xs:time(substring((//ebu:format[@formatDefinition='current'])[1]/ebu:start/ebu:timecode, 1, 8)), '[H01]:[m01]:[s01].[f001]')"/>
-                </StartTimeCode>
-                <EndTimeCode>
-                    <xsl:value-of select="format-time(xs:time(substring((//ebu:format[@formatDefinition='current'])[1]/ebu:end/ebu:timecode, 1, 8)), '[H01]:[m01]:[s01].[f001]')"/>
-                </EndTimeCode>
+
                 <!-- following variables come from the aanbodfilter -->
                 <vrt_status>
                     <xsl:value-of select="$status"/>
