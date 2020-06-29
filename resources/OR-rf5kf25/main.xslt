@@ -34,6 +34,14 @@
         </xsl:choose>
     </xsl:function>
 
+
+    <!-- functions -->
+    <xsl:function name="vrt:vrtToMediahavenTime">
+        <xsl:param name="time"/>        
+        <xsl:variable name="timestring" select="substring($time, 1, 8)"/>
+        <xsl:variable name="milliseconds" select="substring($time, 10, 2)"/>
+        <xsl:value-of select="concat($timestring, '.', $milliseconds, '0')"/>
+    </xsl:function>
     <!-- templates -->
 
     <xsl:template match="ns8:metadataUpdatedEvent | ns8:MakeMetadataAvailableResponse | ns9:metadata">
@@ -47,6 +55,14 @@
                     <xsl:value-of select="//ebu:description[@typeDefinition='long']/dc:description"/>
                 </mh:Description>
             </mhs:Descriptive>
+            <mhs:Structural>
+                <mh:FragmentStartTimeCode>
+                    <xsl:value-of select="vrt:vrtToMediahavenTime((//ebu:format[@formatDefinition='current'])[1]/ebu:start/ebu:timecode)"/>
+                </mh:FragmentStartTimeCode>
+                <mh:FragmentEndTimeCode>
+                    <xsl:value-of select="vrt:vrtToMediahavenTime((//ebu:format[@formatDefinition='current'])[1]/ebu:end/ebu:timecode)"/>
+                </mh:FragmentEndTimeCode>
+            </mhs:Structural>
             <mhs:Dynamic>
                 <CP>VRT</CP>
                 <CP_id>OR-rf5kf25</CP_id>
