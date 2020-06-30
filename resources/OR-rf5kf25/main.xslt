@@ -14,6 +14,8 @@
     <xsl:include href="aanbodfilter.xslt" />
 
     <!-- variables -->
+    <xsl:variable name="framerate" select="xs:integer((//ebu:format[@formatDefinition='current'])[1]/ebu:videoFormat/ebu:frameRate)"/>
+
 
     <!-- functions -->
     <xsl:function name="vrt:englishToDutch">
@@ -34,13 +36,15 @@
         </xsl:choose>
     </xsl:function>
 
-
-    <!-- functions -->
-    <xsl:function name="vrt:vrtToMediahavenTime">
-        <xsl:param name="time"/>        
-        <xsl:variable name="timestring" select="substring($time, 1, 8)"/>
-        <xsl:variable name="milliseconds" select="substring($time, 10, 2)"/>
-        <xsl:value-of select="concat($timestring, '.', $milliseconds, '0')"/>
+    <xsl:function name="vrt:getFragmentFrames">
+        <xsl:param name="time"/>
+        
+        <xsl:variable name="hours" select="xs:integer(substring($time, 1, 2))"/>
+        <xsl:variable name="minutes" select="xs:integer(substring($time, 4, 2))"/>
+        <xsl:variable name="seconds" select="xs:integer(substring($time, 7, 2))"/>
+        <xsl:variable name="frames" select="xs:integer(substring($time, 10, 2))"/>
+        
+        <xsl:value-of select="($hours * 3600 + $minutes * 60 + $seconds) * $framerate + $frames"/>
     </xsl:function>
     <!-- templates -->
 
@@ -56,12 +60,12 @@
                 </mh:Description>
             </mhs:Descriptive>
             <mhs:Structural>
-                <mh:FragmentStartTimeCode>
-                    <xsl:value-of select="vrt:vrtToMediahavenTime((//ebu:format[@formatDefinition='current'])[1]/ebu:start/ebu:timecode)"/>
-                </mh:FragmentStartTimeCode>
-                <mh:FragmentEndTimeCode>
-                    <xsl:value-of select="vrt:vrtToMediahavenTime((//ebu:format[@formatDefinition='current'])[1]/ebu:end/ebu:timecode)"/>
-                </mh:FragmentEndTimeCode>
+                <mh:FragmentStartFrames>
+                    <xsl:value-of select="vrt:getFragmentFrames((//ebu:format[@formatDefinition='current'])[1]/ebu:start/ebu:timecode)"/>
+                </mh:FragmentStartFrames>
+                <mh:FragmentEndFrames>
+                    <xsl:value-of select="vrt:getFragmentFrames((//ebu:format[@formatDefinition='current'])[1]/ebu:end/ebu:timecode)"/>
+                </mh:FragmentEndFrames>
             </mhs:Structural>
             <mhs:Dynamic>
                 <CP>VRT</CP>
