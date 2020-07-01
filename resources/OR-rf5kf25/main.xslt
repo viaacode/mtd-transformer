@@ -14,7 +14,6 @@
     <xsl:include href="aanbodfilter.xslt" />
 
     <!-- variables -->
-    <xsl:variable name="framerate" select="xs:integer((//ebu:format[@formatDefinition='current'])[1]/ebu:videoFormat/ebu:frameRate)"/>
 
 
     <!-- functions -->
@@ -44,7 +43,8 @@
         <xsl:variable name="seconds" select="xs:integer(substring($time, 7, 2))"/>
         <xsl:variable name="frames" select="xs:integer(substring($time, 10, 2))"/>
         
-        <xsl:value-of select="($hours * 3600 + $minutes * 60 + $seconds) * $framerate + $frames"/>
+        <!-- Fragment start and end get set using a fictious 25 fps -->
+        <xsl:value-of select="($hours * 3600 + $minutes * 60 + $seconds) * 25 + $frames"/>
     </xsl:function>
     <!-- templates -->
 
