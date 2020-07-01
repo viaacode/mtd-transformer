@@ -14,7 +14,7 @@
     <xsl:include href="aanbodfilter.xslt" />
 
     <!-- variables -->
-
+    <xsl:variable name="framerate" select="xs:integer((//ebu:format[@formatDefinition='current'])[1]/ebu:videoFormat/ebu:frameRate)"/>
 
     <!-- functions -->
     <xsl:function name="vrt:englishToDutch">
@@ -43,8 +43,10 @@
         <xsl:variable name="seconds" select="xs:integer(substring($time, 7, 2))"/>
         <xsl:variable name="frames" select="xs:integer(substring($time, 10, 2))"/>
         
-        <!-- Fragment start and end get set using a fictious 25 fps -->
-        <xsl:value-of select="($hours * 3600 + $minutes * 60 + $seconds) * 25 + $frames"/>
+        <!-- Fragment start and end get set using a fictious 25 fps instead of the real fps.
+             The object could be higher fps and thus the frames from the timecode (hh:mm:ss:frames) have to be converted to 25fps.
+             We use floor() instead of round() to ensure we always stay inside the duration of the fragment. -->
+        <xsl:value-of select="($hours * 3600 + $minutes * 60 + $seconds) * 25 + floor($frames * (25 div $framerate))"/>
     </xsl:function>
     <!-- templates -->
 
