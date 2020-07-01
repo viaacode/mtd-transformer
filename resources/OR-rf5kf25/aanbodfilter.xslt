@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsl:stylesheet version="3.0"
-    xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-    xmlns:dc="http://purl.org/dc/elements/1.1/"
-    xmlns:ns8="http://www.vrt.be/mig/viaa"
-    xmlns:xs="http://www.w3.org/2001/XMLSchema"
-    xmlns:fn="http://www.w3.org/2005/xpath-functions"
+<xsl:stylesheet version="3.0" 
+    xmlns:xsl="http://www.w3.org/1999/XSL/Transform" 
+    xmlns:dc="http://purl.org/dc/elements/1.1/" 
+    xmlns:ns8="http://www.vrt.be/mig/viaa" 
+    xmlns:xs="http://www.w3.org/2001/XMLSchema" 
+    xmlns:fn="http://www.w3.org/2005/xpath-functions" 
     xmlns:ebu="urn:ebu:metadata-schema:ebuCore_2012" exclude-result-prefixes="dc ns8 xs fn ebu">
     <xsl:output method="xml" encoding="UTF-8" byte-order-mark="no" indent="yes"/>
 

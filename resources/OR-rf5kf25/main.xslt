@@ -1,20 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsl:stylesheet version="3.0"
-    xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-    xmlns:dc="http://purl.org/dc/elements/1.1/"
-    xmlns:ns8="http://www.vrt.be/mig/viaa"
-    xmlns:ns9="http://www.vrt.be/mig/viaa/api"
-    xmlns:xs="http://www.w3.org/2001/XMLSchema"
-    xmlns:fn="http://www.w3.org/2005/xpath-functions"
-    xmlns:ebu="urn:ebu:metadata-schema:ebuCore_2012"
+<xsl:stylesheet version="3.0" 
+    xmlns:xsl="http://www.w3.org/1999/XSL/Transform" 
+    xmlns:dc="http://purl.org/dc/elements/1.1/" 
+    xmlns:ns8="http://www.vrt.be/mig/viaa" 
+    xmlns:ns9="http://www.vrt.be/mig/viaa/api" 
+    xmlns:xs="http://www.w3.org/2001/XMLSchema" 
+    xmlns:fn="http://www.w3.org/2005/xpath-functions" 
+    xmlns:ebu="urn:ebu:metadata-schema:ebuCore_2012" 
     xmlns:vrt="http://this.this.com" exclude-result-prefixes="dc ns8 xs fn ebu">
     <xsl:output method="xml" encoding="UTF-8" byte-order-mark="no" indent="yes"/>
 
     <!-- includes -->
     <xsl:include href="aanbodfilter.xslt" />
+    <xsl:include href="structural.xslt" />
 
     <!-- variables -->
-    <xsl:variable name="framerate" select="xs:integer((//ebu:format[@formatDefinition='current'])[1]/ebu:videoFormat/ebu:frameRate)"/>
+
 
     <!-- functions -->
     <xsl:function name="vrt:englishToDutch">
@@ -35,23 +36,10 @@
         </xsl:choose>
     </xsl:function>
 
-    <xsl:function name="vrt:getFragmentFrames">
-        <xsl:param name="time"/>
-        
-        <xsl:variable name="hours" select="xs:integer(substring($time, 1, 2))"/>
-        <xsl:variable name="minutes" select="xs:integer(substring($time, 4, 2))"/>
-        <xsl:variable name="seconds" select="xs:integer(substring($time, 7, 2))"/>
-        <xsl:variable name="frames" select="xs:integer(substring($time, 10, 2))"/>
-        
-        <!-- Fragment start and end get set using a fictious 25 fps instead of the real fps.
-             The object could be higher fps and thus the frames from the timecode (hh:mm:ss:frames) have to be converted to 25fps.
-             We use floor() instead of round() to ensure we always stay inside the duration of the fragment. -->
-        <xsl:value-of select="($hours * 3600 + $minutes * 60 + $seconds) * 25 + floor($frames * (25 div $framerate))"/>
-    </xsl:function>
     <!-- templates -->
 
     <xsl:template match="ns8:metadataUpdatedEvent | ns8:MakeMetadataAvailableResponse | ns9:metadata">
-        <mhs:Sidecar xmlns:mhs="https://zeticon.mediahaven.com/metadata/19.2/mhs/"
+        <mhs:Sidecar xmlns:mhs="https://zeticon.mediahaven.com/metadata/19.2/mhs/" 
             xmlns:mh="https://zeticon.mediahaven.com/metadata/19.2/mh/" version="19.2">
             <mhs:Descriptive>
                 <mh:Title>
@@ -62,12 +50,7 @@
                 </mh:Description>
             </mhs:Descriptive>
             <mhs:Structural>
-                <mh:FragmentStartFrames>
-                    <xsl:value-of select="vrt:getFragmentFrames((//ebu:format[@formatDefinition='current'])[1]/ebu:start/ebu:timecode)"/>
-                </mh:FragmentStartFrames>
-                <mh:FragmentEndFrames>
-                    <xsl:value-of select="vrt:getFragmentFrames((//ebu:format[@formatDefinition='current'])[1]/ebu:end/ebu:timecode)"/>
-                </mh:FragmentEndFrames>
+                <xsl:call-template name="structural"/>
             </mhs:Structural>
             <mhs:Dynamic>
                 <CP>VRT</CP>
@@ -84,7 +67,7 @@
                         </xsl:if>
                     </xsl:for-each>
                 </dc_identifier_localids>
-                <dc_relations> <!-- todo: eva kijkt na --> </dc_relations>
+                <dc_relations><!-- todo: eva kijkt na --></dc_relations>
                 <title>
                     <xsl:value-of select="//ebu:title/dc:title"/>
                 </title>
@@ -144,15 +127,15 @@
                 <description>
                     <xsl:value-of select="//ebu:description[@typeDefinition='long']/dc:description"/>
                 </description>
-                <dc_description_lang> <!-- todo: inhoud nog te bespreken--> </dc_description_lang>
-                <dc_description_ondertitels> <!-- empty --> </dc_description_ondertitels>
+                <dc_description_lang><!-- todo: inhoud nog te bespreken--></dc_description_lang>
+                <dc_description_ondertitels><!-- empty --></dc_description_ondertitels>
                 <dc_description_programma>
                     <xsl:value-of select="//ebu:description[@typeDefinition='short']/dc:description"/>
                 </dc_description_programma>
                 <dc_description_cast>
                     <xsl:value-of select="//ebu:description[@typeDefinition='cast']/dc:description"/>
                 </dc_description_cast>
-                <dc_description_transcriptie> <!-- empty--> </dc_description_transcriptie>
+                <dc_description_transcriptie><!-- empty--></dc_description_transcriptie>
                 <dc_description_categorie>
                     <xsl:value-of select="//ebu:description[@typeDefinition='category']/dc:description"/>
                 </dc_description_categorie>
@@ -163,7 +146,7 @@
                         </multiselect>
                     </xsl:for-each>
                 </dc_types>
-                <dc_coverages> <!-- empty --> </dc_coverages>
+                <dc_coverages><!-- empty --></dc_coverages>
                 <dc_subjects type="list" strategy="OVERWRITE">
                     <xsl:for-each select="tokenize(//ebu:subject/@note,',')">
                         <Trefwoord>
@@ -171,19 +154,19 @@
                         </Trefwoord>
                     </xsl:for-each>
                 </dc_subjects>
-                <dc_languages> <!-- empty--> </dc_languages>
+                <dc_languages><!-- empty--></dc_languages>
                 <dc_rights_licenses type="list" strategy="OVERWRITE">
                     <xsl:call-template name="aanbodfilter"/>
                 </dc_rights_licenses>
-                <dc_rights_rightsOwners> <!-- empty --> </dc_rights_rightsOwners>
-                <dc_rights_rightsHolders  type="list" strategy="OVERWRITE">
+                <dc_rights_rightsOwners><!-- empty --></dc_rights_rightsOwners>
+                <dc_rights_rightsHolders type="list" strategy="OVERWRITE">
                     <xsl:if test="normalize-space(//ebu:rights/ebu:rightsHolder/ebu:organisationDetails/ebu:organisationName)">
                         <Licentiehouder>
                             <xsl:value-of select="//ebu:rights/ebu:rightsHolder/ebu:organisationDetails/ebu:organisationName"/>
                         </Licentiehouder>
                     </xsl:if>
                 </dc_rights_rightsHolders>
-                <dc_rights_credit> <!-- empty --> </dc_rights_credit>
+                <dc_rights_credit><!-- empty --></dc_rights_credit>
                 <dc_rights_comment>
                     <xsl:value-of select="//ebu:description[@typeDefinition='rights']/dc:description, //ebu:description[@typeDefinition='rightsType']/dc:description"/>
                 </dc_rights_comment>
