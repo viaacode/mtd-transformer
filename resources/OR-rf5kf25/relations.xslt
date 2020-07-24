@@ -52,7 +52,7 @@
     <!-- templates -->
     <xsl:template name="relations">
         <xsl:for-each select="//ebu:relation[ebu:relationIdentifier/dc:identifier]">
-            <xsl:variable name="mapped_relation" select="$relation(current()/@typeDefinition)"/>
+            <xsl:variable name="mapped_relation" select="$relation(normalize-space(current()/@typeDefinition))"/>
             <xsl:if test="$mapped_relation != ''">
                 <xsl:element name="{$mapped_relation}">
                     <xsl:value-of select="current()/ebu:relationIdentifier/dc:identifier"/>
