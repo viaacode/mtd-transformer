@@ -12,7 +12,14 @@
 
 
     <!-- variables -->
-    <xsl:variable name="framerate" select="xs:integer((//ebu:format[@formatDefinition='current'])[1]/ebu:videoFormat/ebu:frameRate)"/>
+    <xsl:variable name="framerate">
+        <xsl:choose>
+            <xsl:when test="(//ebu:format[@formatDefinition='current'])[1]/ebu:videoFormat/ebu:frameRate">
+                <xsl:value-of select="xs:integer((//ebu:format[@formatDefinition='current'])[1]/ebu:videoFormat/ebu:frameRate)"/>
+            </xsl:when>
+            <xsl:otherwise>25</xsl:otherwise>
+        </xsl:choose>
+    </xsl:variable>
     <xsl:variable name="StartOfMedia" select="vrt:timecodeToFrames((//ebu:format[@formatDefinition='current'])[1]/ebu:technicalAttributeString[@typeDefinition='SOM'])"/>
     <xsl:variable name="StartOfContent">
         <xsl:choose>
