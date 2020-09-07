@@ -13,6 +13,7 @@
     <!-- includes -->
     <xsl:include href="aanbodfilter.xslt" />
     <xsl:include href="structural.xslt" />
+    <xsl:include href="relations.xslt" />
 
     <!-- variables -->
 
@@ -38,7 +39,7 @@
 
     <!-- templates -->
 
-    <xsl:template match="ns8:metadataUpdatedEvent | ns8:MakeMetadataAvailableResponse | ns9:metadata">
+    <xsl:template match="ns8:metadataUpdatedEvent | ns8:MakeMetadataAvailableResponse | ns9:metadata | ns9:metadataUpdatedEvent | ns9:getMetadataResponse">
         <mhs:Sidecar xmlns:mhs="https://zeticon.mediahaven.com/metadata/19.2/mhs/" 
             xmlns:mh="https://zeticon.mediahaven.com/metadata/19.2/mh/" version="19.2">
             <mhs:Descriptive>
@@ -67,7 +68,9 @@
                         </xsl:if>
                     </xsl:for-each>
                 </dc_identifier_localids>
-                <dc_relations><!-- todo: eva kijkt na --></dc_relations>
+                <dc_relations>
+                    <xsl:call-template name="relations"/>
+                </dc_relations>
                 <title>
                     <xsl:value-of select="//ebu:title/dc:title"/>
                 </title>

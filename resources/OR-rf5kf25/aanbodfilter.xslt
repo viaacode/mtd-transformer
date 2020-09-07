@@ -24,7 +24,7 @@
     <xsl:variable name="rightsType" select="//ebu:description[@typeDefinition='rightsType']/dc:description"/>
     <xsl:variable name="category" select="//ebu:description[@typeDefinition='category']/dc:description"/>
     <xsl:variable name="genre" select="//ebu:type/ebu:genre/@typeDefinition"/>
-    <xsl:variable name="itemBehoortTotFootage" as="xs:boolean" select="boolean(//ebu:relation[@typeDefinition='Item behoort tot footage'])" />
+    <xsl:variable name="itemBehoortTotFootage" as="xs:boolean" select="boolean(//ebu:relation[$relation(normalize-space(@typeDefinition)) = 'FOOTAGE_HAS_ITEM'])" />
 
     <!-- templates -->
     <xsl:template name="aanbodfilter">
