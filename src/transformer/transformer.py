@@ -15,7 +15,7 @@ SUPPORTED_TYPES = ["xml", "json"]
 
 class Transformer:
     def __init__(self):
-        pass
+        self.saxon_processor = saxonc.PySaxonProcessor(license=False)
 
     def list_transformations(self) -> List[str]:
         resources = Path("./resources")
@@ -64,12 +64,11 @@ class Transformer:
 
         log.debug("Transformer", xml=xml, transformation=transformation, xslt=xslt_path)
 
-        with saxonc.PySaxonProcessor(license=False) as proc:
-            xslt_proc = proc.new_xslt30_processor()
+        xslt_proc = self.saxon_processor.new_xslt30_processor()
 
-            node = proc.parse_xml(xml_text=xml.decode("utf-8"))
+        node = self.saxon_processor.parse_xml(xml_text=xml.decode("utf-8"))
 
-            result = xslt_proc.transform_to_string(stylesheet_file=xslt_path, xdm_node= node)
+        result = xslt_proc.transform_to_string(stylesheet_file=xslt_path, xdm_node= node)
         
         return result
 
