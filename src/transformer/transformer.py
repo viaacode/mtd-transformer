@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 import os
-import subprocess
+import saxonc
 from pathlib import Path
 from typing import List
 
@@ -61,29 +61,20 @@ class Transformer:
 
     def __transform_xml(self, xml: bytes, transformation: str) -> str:
         xslt_path = self.__get_path_to_xslt(transformation)
-        saxon_path = self.__get_path_to_saxon()
 
         log.debug("Transformer", xml=xml, transformation=transformation, xslt=xslt_path)
 
-        # The Saxon command receives the following parameters:
-        # `-s:-` sets the source to stdin
-        # `-xsl:f{xslt}` sets the xslt to be used, currently located in a file.
-        result = subprocess.run(
-            ["java", "-jar", saxon_path, "-s:-", f"-xsl:{xslt_path}"],
-            stdout=subprocess.PIPE,
-            input=xml,
-        )
+        with saxonc.PySaxonProcessor(license=False) as proc:
+            xslt_proc = proc.new_xslt30_processor()
 
-        # Captured stdout needs to be decoded from bytes to string.
-        return str(result.stdout.decode())
+            node = proc.parse_xml(xml_text=xml.decode("utf-8"))
+
+            result = xslt_proc.transform_to_string(stylesheet_file=xslt_path, xdm_node= node)
+        
+        return result
 
     def __get_path_to_xslt(self, transformation: str):
         # The xslt should exist in the resources folder.
         base_dir = os.getcwd()
         xslt_path = os.path.join(base_dir, "resources", transformation, "main.xslt")
         return xslt_path
-
-    def __get_path_to_saxon(self):
-        base_dir = os.getcwd()
-        jar_path = os.path.join(base_dir, "lib", "Saxon", "saxon9he.jar")
-        return jar_path
