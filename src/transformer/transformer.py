@@ -68,7 +68,7 @@ class Transformer:
 
         node = self.saxon_processor.parse_xml(xml_text=xml.decode("utf-8"))
 
-        result = xslt_proc.transform_to_string(stylesheet_file=xslt_path, xdm_node= node)
+        result = xslt_proc.transform_to_string(stylesheet_file=xslt_path, xdm_node=node)
         
         return result
 
