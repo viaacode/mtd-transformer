@@ -20,6 +20,7 @@ pytest-cov = "*"
 flask = "*"
 uwsgi = "*"
 viaa-chassis = "*"
+cython = "*"
 
 [requires]
 python_version = "3.8"
