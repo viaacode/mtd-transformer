@@ -7,62 +7,35 @@ For XML-to-XML transformations Saxon HE is used under the hood. Saxon HE is (c) 
 
 ## Prerequisites
 
-- Python 3.8
-- Java (for running Saxon HE)
+- Python (tested with v3.8)
+- Pipenv
+- Saxon/C python api (make sure it's available in your PYTHONPATH)
 
 ## Installation
 
 1. Clone or download the repository
 2. `cd` into the directory
-3. Create a virtual environment `python -m venv .`
-4. Activate the environment `source bin/activate` on Linux or `Scripts/activate` on Windows.
-5. Install dependencies `pip install -r requirements.txt`
+3. Create a virtual environment and install dependencies using `pipenv install`
 
 ## Usage
 
 ### CLI
 
-Using the CLI you can transform a file and list the available transformations.
-
-Output of `python cli.py --help`:
-
-```
-Usage: cli.py [OPTIONS] COMMAND [ARGS]...
-
-Coole CLI voor metadata transformaties
-
-Options:
--v, --verbose
---help         Show this message and exit.
-
-Commands:
-list       List all available transformations.
-transform  Transforms an input file based on a given transformation.
-validate
-```
-#### Example
-
-`python cli.py transform --help` will give more information about the parameters.
-
-`python cli.py transform` will prompt for an input file and a transformation.
-
-`python cli.py transform -i C:\test.xml -t OR-rf5kf25` will transform `C:\test.xml` using the transformation specified in `./resources/OR-rf5kf25` and output the result to `stdout`
-
-`python cli.py transform -i C:\test.xml -t OR-rf5kf25 -o C:\output\test.xml`  will transform `C:\test.xml` using the transformation specified in `./resources/OR-rf5kf25` and output the result to `C:\output\test.xml`
+Coming soon
 
 ### API
 
-Run `python app.py` to start the service. You will be using the Flask development server.
+Run `pipenv run uwsgi -i uwsgi.ini` to start the service.
 
 #### Example
 
-To transform an XML-file, send a `POST` request to `http://0.0.0.0:5000/transform?transformation=OR-rf5kf25` with the xml in the body.
+To transform an XML-file, send a `POST` request to `http://0.0.0.0:8080/transform?transformation=OR-rf5kf25` with the xml in the body.
 Add `application/xml` to the `Content-Type` header.
 
 HTTP-call:
 ```HTTP
 POST /v1/transform?transformation=OR-rf5kf25 HTTP/1.1
-Host: 0.0.0.0:5000
+Host: 0.0.0.0:8080
 Content-Type: application/xml
 
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
