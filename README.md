@@ -10,6 +10,10 @@ For XML-to-XML transformations Saxon HE is used under the hood. Saxon HE is (c) 
 - Python (tested with v3.8)
 - Pipenv
 - Saxon/C python api (make sure it's available in your PYTHONPATH)
+    - [Installing Saxon/C](https://www.saxonica.com/saxon-c/documentation/index.html#!starting/installing)
+    - [Building the python package](https://www.saxonica.com/saxon-c/documentation/index.html#!starting/installingpython)
+    - Adding it to your PYTHONPATH, for example using: `export PYTHONPATH=~/Downloads/Saxonica/SaxonHEC1.2.1/Saxon.C.API/python-saxon` (Depends on your OS and install location)
+
 
 ## Installation
 
