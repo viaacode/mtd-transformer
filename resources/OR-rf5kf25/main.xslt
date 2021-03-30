@@ -14,6 +14,7 @@
     <xsl:include href="aanbodfilter.xslt" />
     <xsl:include href="structural.xslt" />
     <xsl:include href="relations.xslt" />
+    <xsl:include href="strata.xslt" />
 
     <!-- variables -->
 
@@ -130,7 +131,9 @@
                 <description>
                     <xsl:value-of select="//ebu:description[@typeDefinition='long']/dc:description"/>
                 </description>
-                <dc_description_lang><!-- todo: inhoud nog te bespreken--></dc_description_lang>
+                <dc_description_lang>
+                    <xsl:call-template name="strata"/>
+                </dc_description_lang>
                 <dc_description_ondertitels><!-- empty --></dc_description_ondertitels>
                 <dc_description_programma>
                     <xsl:value-of select="//ebu:description[@typeDefinition='short']/dc:description"/>
