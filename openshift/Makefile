@@ -5,5 +5,5 @@ SHELL = /bin/bash
 
 test:
 	pip install pipenv
-	pipenv install
+	pipenv install --dev
 	pipenv run pytest -vvv --cov=./src --cov=./src/transformer --junit-xml=./tests/test_results.xml
