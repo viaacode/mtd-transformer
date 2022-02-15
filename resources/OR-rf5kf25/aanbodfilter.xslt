@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsl:stylesheet version="3.0" 
-    xmlns:xsl="http://www.w3.org/1999/XSL/Transform" 
-    xmlns:dc="http://purl.org/dc/elements/1.1/" 
-    xmlns:ns8="http://www.vrt.be/mig/viaa" 
-    xmlns:xs="http://www.w3.org/2001/XMLSchema" 
-    xmlns:fn="http://www.w3.org/2005/xpath-functions" 
+<xsl:stylesheet version="3.0"
+    xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+    xmlns:dc="http://purl.org/dc/elements/1.1/"
+    xmlns:ns8="http://www.vrt.be/mig/viaa"
+    xmlns:xs="http://www.w3.org/2001/XMLSchema"
+    xmlns:fn="http://www.w3.org/2005/xpath-functions"
     xmlns:ebu="urn:ebu:metadata-schema:ebuCore_2012" exclude-result-prefixes="dc ns8 xs fn ebu">
     <xsl:output method="xml" encoding="UTF-8" byte-order-mark="no" indent="yes"/>
 
@@ -28,37 +28,40 @@
 
     <!-- templates -->
     <xsl:template name="aanbodfilter">
-        <xsl:if test="$hasBeenBroadcasted and
-                ($status = 'gearchiveerd') and
+        <xsl:if test="$hasBeenBroadcasted">
+            <multiselect>BEZOEKERTOOL-CONTENT</multiselect>
+            <multiselect>BEZOEKERTOOL-METADATA-ALL</multiselect>
+            <xsl:if test="($status = 'gearchiveerd') and
                 ($productionMethod != 'aankoop') and
                 ($ebuType = ('item', 'online_item', 'program')) and
                 ($rightsType = ('', 'vrij gebruik')) and
                 ($audioOrVideo = ('audio', 'video')) and
                 not($itemBehoortTotFootage)">
-            <xsl:choose>
-                <xsl:when test="(($audioOrVideo = 'video') and
+                <xsl:choose>
+                    <xsl:when test="(($audioOrVideo = 'video') and
                                 ($category != 'sport') and
                                 ($genre != 'fictie'))
                                 or
                                 (($audioOrVideo = 'audio') and
                                 ($category = 'nieuws en duiding'))">
-                    <multiselect>VIAA-ONDERWIJS</multiselect>
-                    <multiselect>VIAA-ONDERZOEK</multiselect>
-                    <multiselect>VIAA-INTRA_CP-CONTENT</multiselect>
-                    <multiselect>VIAA-INTRA_CP-METADATA-ALL</multiselect>
-                    <multiselect>VIAA-PUBLIEK-METADATA-LTD</multiselect>
-                </xsl:when>
-                <xsl:when test="($audioOrVideo = 'video' and
+                        <multiselect>VIAA-ONDERWIJS</multiselect>
+                        <multiselect>VIAA-ONDERZOEK</multiselect>
+                        <multiselect>VIAA-INTRA_CP-CONTENT</multiselect>
+                        <multiselect>VIAA-INTRA_CP-METADATA-ALL</multiselect>
+                        <multiselect>VIAA-PUBLIEK-METADATA-LTD</multiselect>
+                    </xsl:when>
+                    <xsl:when test="($audioOrVideo = 'video' and
                                 (($category = 'sport' and $genre != 'fictie') or
                                 ($category != 'sport' and $genre = 'fictie')))
                                 or
                                 ($audioOrVideo = 'audio' and
                                 $category != 'nieuws en duiding')">
-                    <multiselect>VIAA-INTRA_CP-METADATA-ALL</multiselect>
-                    <multiselect>VIAA-PUBLIEK-METADATA-LTD</multiselect>
-                </xsl:when>
-                <xsl:otherwise></xsl:otherwise>
-            </xsl:choose>
+                        <multiselect>VIAA-INTRA_CP-METADATA-ALL</multiselect>
+                        <multiselect>VIAA-PUBLIEK-METADATA-LTD</multiselect>
+                    </xsl:when>
+                    <xsl:otherwise></xsl:otherwise>
+                </xsl:choose>
+            </xsl:if>
         </xsl:if>
     </xsl:template>
 </xsl:stylesheet>
