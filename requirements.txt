@@ -1,0 +1,14 @@
+blinker==1.7.0
+click==8.1.7
+Cython==3.0.8
+Flask==3.0.0
+itsdangerous==2.1.2
+Jinja2==3.1.3
+MarkupSafe==2.1.3
+python-json-logger==2.0.7
+PyYAML==6.0.1
+saxonche==12.4.1.0
+structlog==24.1.0
+uWSGI==2.0.23
+viaa-chassis==0.2.0rc1
+Werkzeug==3.0.1

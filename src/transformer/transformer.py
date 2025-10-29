@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 import os
-import saxonc
+import saxonche
 from pathlib import Path
 from typing import List
 
@@ -14,9 +14,6 @@ SUPPORTED_TYPES = ["xml", "json"]
 
 
 class Transformer:
-    def __init__(self):
-        self.saxon_processor = saxonc.PySaxonProcessor(license=False)
-
     def list_transformations(self) -> List[str]:
         resources = Path("./resources")
 
@@ -60,17 +57,20 @@ class Transformer:
         pass
 
     def __transform_xml(self, xml: bytes, transformation: str) -> str:
-        xslt_path = self.__get_path_to_xslt(transformation)
+        with saxonche.PySaxonProcessor(license=False) as proc:
+            xslt_path = self.__get_path_to_xslt(transformation)
 
-        log.debug("Transformer", xml=xml, transformation=transformation, xslt=xslt_path)
+            log.debug("Transformer", xml=xml, transformation=transformation, xslt=xslt_path)
 
-        xslt_proc = self.saxon_processor.new_xslt30_processor()
+            xslt_proc = proc.new_xslt30_processor()
 
-        node = self.saxon_processor.parse_xml(xml_text=xml.decode("utf-8"))
+            node = proc.parse_xml(xml_text=xml.decode("utf-8"))
+            
+            executable = xslt_proc.compile_stylesheet(stylesheet_file=xslt_path)
 
-        result = xslt_proc.transform_to_string(stylesheet_file=xslt_path, xdm_node=node)
-        
-        return result
+            result = executable.transform_to_string(xdm_node=node)
+            
+            return result
 
     def __get_path_to_xslt(self, transformation: str):
         # The xslt should exist in the resources folder.
